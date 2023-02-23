@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
-import website.ilib.noproxy.repository.UserRepository;
+import website.ilib.noproxy.user.repository.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor

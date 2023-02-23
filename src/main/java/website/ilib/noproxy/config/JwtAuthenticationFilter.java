@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.RequiredArgsConstructor;
-import website.ilib.noproxy.service.JwtService;
+import website.ilib.noproxy.config.service.JwtService;
 
 @Component
 @RequiredArgsConstructor

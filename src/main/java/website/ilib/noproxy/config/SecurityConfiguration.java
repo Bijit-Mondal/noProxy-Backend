@@ -1,6 +1,5 @@
 package website.ilib.noproxy.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-	@Autowired
-	private JwtAuthenticationFilter jwtAuthFilter;
-	@Autowired
-	private AuthenticationProvider authenticationProvider;
+	private final JwtAuthenticationFilter jwtAuthFilter;
+
+	private final AuthenticationProvider authenticationProvider;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -29,8 +27,8 @@ public class SecurityConfiguration {
 			.authorizeRequests()
 			.antMatchers("/api/v1/auth/**").permitAll()
 			.antMatchers("/info").permitAll()
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .antMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers("/api/v1/teacher/**").hasRole("TEACHER")
+            .antMatchers("/api/v1/user/**").hasAnyRole("USER", "TEACHER","SUPERADMIN")
             .anyRequest().authenticated()
 			.and()
 				.sessionManagement()

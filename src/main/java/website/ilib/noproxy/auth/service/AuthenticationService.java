@@ -1,7 +1,10 @@
-package website.ilib.noproxy.service;
+package website.ilib.noproxy.auth.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +12,10 @@ import lombok.RequiredArgsConstructor;
 import website.ilib.noproxy.auth.AuthenticationRequest;
 import website.ilib.noproxy.auth.AuthenticationResponse;
 import website.ilib.noproxy.auth.RegisterRequest;
-import website.ilib.noproxy.entity.Role;
-import website.ilib.noproxy.entity.User;
-import website.ilib.noproxy.repository.UserRepository;
+import website.ilib.noproxy.role.Role;
+import website.ilib.noproxy.user.entity.User;
+import website.ilib.noproxy.user.repository.UserRepository;
+import website.ilib.noproxy.config.service.JwtService;
 
 @Service
 @RequiredArgsConstructor
@@ -52,19 +56,16 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						request.getEmail(),
-						request.getPassword()
-				)
-		);
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+		} catch (AuthenticationException e) {
+			throw new BadCredentialsException("Invalid email/password");
+		}
 
 		var user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow();
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + request.getEmail()));
 		var jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder()
-				.jwt(jwtToken)
-				.build();
+		return AuthenticationResponse.builder().jwt(jwtToken).build();
 	}
-
 }

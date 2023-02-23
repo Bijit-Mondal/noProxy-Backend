@@ -1,4 +1,4 @@
-package website.ilib.noproxy.entity;
+package website.ilib.noproxy.role;
 
 public enum Role {
 	STUDENT,

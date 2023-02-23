@@ -1,4 +1,4 @@
-package website.ilib.noproxy.entity;
+package website.ilib.noproxy.user.entity;
 
 
 import java.util.Collection;
@@ -19,6 +19,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import website.ilib.noproxy.role.Role;
 
 
 @Data

@@ -1,4 +1,4 @@
-package website.ilib.noproxy.service;
+package website.ilib.noproxy.config.service;
 
 
 import java.security.Key;
