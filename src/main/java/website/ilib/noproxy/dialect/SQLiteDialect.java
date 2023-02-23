@@ -4,14 +4,20 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
+import org.hibernate.dialect.identity.IdentityColumnSupport;
+import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 import org.hibernate.type.StringType;
+
 
 import java.sql.Types;
 
 public class SQLiteDialect extends Dialect {
-
+	
+	private IdentityColumnSupport identityColumnSupport;
+	
     public SQLiteDialect() {
-        registerColumnType(Types.BIT, "integer");
+        identityColumnSupport = new IdentityColumnSupportImpl();
+		registerColumnType(Types.BIT, "integer");
         registerColumnType(Types.TINYINT, "tinyint");
         registerColumnType(Types.SMALLINT, "smallint");
         registerColumnType(Types.INTEGER, "integer");
@@ -38,6 +44,14 @@ public class SQLiteDialect extends Dialect {
         registerFunction("mod", new SQLFunctionTemplate(StringType.INSTANCE, "?1 % ?2"));
         registerFunction("substr", new StandardSQLFunction("substr", StringType.INSTANCE));
         registerFunction("substring", new StandardSQLFunction("substr", StringType.INSTANCE));
+    
+        identityColumnSupport = new IdentityColumnSupportImpl();
+        
+    }
+    
+    @Override
+    public IdentityColumnSupport getIdentityColumnSupport() {
+    	return identityColumnSupport;
     }
 
     public boolean supportsIdentityColumns() {
