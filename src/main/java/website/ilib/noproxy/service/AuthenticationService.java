@@ -25,8 +25,19 @@ public class AuthenticationService {
 
 	private final AuthenticationManager authenticationManager;
 
-	public AuthenticationResponse register(RegisterRequest request) {
+	public class UserAlreadyExistsException extends RuntimeException {
+
+		public UserAlreadyExistsException(String message) {
+			super(message);
+		}
+
+	}
+
+	public AuthenticationResponse register(RegisterRequest request) throws UserAlreadyExistsException{
 		// TODO Auto-generated method stub
+		if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+			throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists.");
+		}
 		User user = User.builder()
 				.name(request.getName())
 				.email(request.getEmail())
